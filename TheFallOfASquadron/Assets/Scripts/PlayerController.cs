@@ -4,21 +4,27 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private float speed = 10.0f;
-    private float yUpperBound = 11.0f;
-    private float yBottomBound = 3.5f;
+    private float speed = 5.0f;
+    private float yUpperBound = 8.0f;
+    private float yBottomBound = 2.0f;
     private float xBound = 10.5f;
+
+    private SpawnManager spawnManager;
+
+    public float laserCooldown = 0.5f;
+    private float lastLaserTime = -Mathf.Infinity;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        spawnManager = FindObjectOfType<SpawnManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
         PlayerMovement();
+        PlayerLaser();
     }
 
     // Movements of the player using the WASD keys with the boundaries of the camera
@@ -44,5 +50,22 @@ public class PlayerController : MonoBehaviour
         }
 
         transform.Translate(direction * Time.deltaTime * speed);
+    }
+
+    private void PlayerLaser()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time >= lastLaserTime + laserCooldown)
+        {
+            spawnManager.SpawnLaser(transform.position, 0);
+            lastLaserTime = Time.time;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Heal"))
+        {
+            Destroy(other.gameObject);
+        }
     }
 }
