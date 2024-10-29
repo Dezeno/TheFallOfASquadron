@@ -9,7 +9,7 @@ public class HealMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -17,7 +17,7 @@ public class HealMovement : MonoBehaviour
     {
         transform.Translate(Vector3.forward * Time.deltaTime * -speed);
 
-        if(transform.position.z < -10)
+        if (transform.position.z < -10)
         {
             Destroy(gameObject);
         }
