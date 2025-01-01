@@ -5,12 +5,12 @@ using UnityEngine;
 public class PlayerLaserMovement : MonoBehaviour
 {
     public float speed = 20.0f;
-    public float zBound = 100.0f;
+    private float zBound = 50.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -29,6 +29,14 @@ public class PlayerLaserMovement : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             Destroy(gameObject);
+
+            EnemyMovement enemyHit = other.GetComponent<EnemyMovement>();
+            enemyHit.health--;
+
+            if (enemyHit.health <= 0)
+            {
+                Destroy(other.gameObject);
+            }
         }
     }
 }

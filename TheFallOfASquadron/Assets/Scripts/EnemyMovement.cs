@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class MoveForward : MonoBehaviour
+public class EnemyMovement : MonoBehaviour
 {
     private float speed = 100.0f;
-    private float movingLimit = 10.0f;
+    private float movingLimit = 20.0f;
     private float startDelay = 6.0f;
     private float laserCooldown = 1.5f;
 
+    public int health;
 
-    private SpawnManager spawnManager;
+    private GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        spawnManager = FindObjectOfType<SpawnManager>();
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         InvokeRepeating("EnemyLaser", startDelay, laserCooldown);
     }
 
@@ -29,14 +30,18 @@ public class MoveForward : MonoBehaviour
     // Makes the enemy fly towards the player and stops once it's close enough
     void EnemyApproach()
     {
-        if (transform.position.z > movingLimit)
+        if (transform.position.z > movingLimit && gameManager.isGameActive)
         {
             transform.Translate(Vector3.forward * Time.deltaTime * -speed);
+        }
+        if(!gameManager.isGameActive)
+        {
+            Destroy(gameObject);
         }
     }
 
     private void EnemyLaser()
     {
-        spawnManager.SpawnLaser(transform.position, 1);
+        gameManager.SpawnLaser(transform.position, 1);
     }
 }
